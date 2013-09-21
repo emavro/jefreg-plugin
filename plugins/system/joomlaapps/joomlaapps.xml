@@ -26,10 +26,10 @@
 					label="PLG_JOOMLAAPPS_FILES_LABEL"
 					rows="15"
 				/>
-				<field name="files" type="text"
+				<field name="entry" type="text"
 					description="PLG_JOOMLAAPPS_ENTRY_DESC"
 					label="PLG_JOOMLAAPPS_ENTRY_LABEL"
-					size="50"
+					size="60"
 				/>
 			</fieldset>
 		</fields>
