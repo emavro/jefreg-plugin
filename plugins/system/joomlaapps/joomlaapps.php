@@ -32,9 +32,6 @@ class PlgSystemJoomlaapps extends JPlugin
 				'installat'	=>	base64_decode($app->input->get('installat', null, 'base64')),
 				'installapp'	=>	$app->input->get('installapp', null, 'int'),
 				'timestamp'	=>	time(),
-				'product'	=>	addslashes(base64_decode($app->input->get('product', '', 'base64'))),
-				'release'	=>	preg_replace('/[^\d\.]/', '', base64_decode($app->input->get('release', '', 'base64'))),
-				'dev_level'	=>	(int) base64_decode($app->input->get('dev_level', '', 'base64')),
 			);
 		}
 		return $this->_joomlaapps;
