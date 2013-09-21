@@ -117,7 +117,15 @@ class plgSystemJoomlaapps extends JPlugin
 				$installfrom = $this->getInstallFrom($joomlaapps['installapp']);
 				$app->redirect($joomlaapps['installat'].$installfrom);
 			}
-			$app->redirect(JRoute::_('index.php?option=com_user&view=login'));
+			$entry = $this->params->get('entry', null);
+			if ($entry)
+			{
+				$app->redirect($entry);
+			}
+			else
+			{
+				$app->redirect(JRoute::_('index.php?option=com_user&view=login'));
+			}
 		}
 		else
 		{
