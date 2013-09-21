@@ -16,7 +16,7 @@ JFormHelper::loadRuleClass('url');
  *
  * @package     Joomla.Plugin
  * @subpackage  System.joomlaapps
- * @since       3.1
+ * @since       2.5
  */
 class PlgSystemJoomlaapps extends JPlugin
 {
@@ -118,7 +118,15 @@ class PlgSystemJoomlaapps extends JPlugin
 				$installfrom = $this->getInstallFrom($joomlaapps['installapp']);
 				$app->redirect($joomlaapps['installat'].$installfrom);
 			}
-			$app->redirect(JRoute::_('index.php?option=com_users&view=login'));
+			$entry = $this->params->get('entry', null);
+			if ($entry)
+			{
+				$app->redirect($entry);
+			}
+			else
+			{
+				$app->redirect(JRoute::_('index.php?option=com_user&view=login'));
+			}
 		}
 		else
 		{
