@@ -26,6 +26,11 @@
 					label="PLG_JOOMLAAPPS_FILES_LABEL"
 					rows="15"
 				/>
+				<field name="files" type="text"
+					description="PLG_JOOMLAAPPS_ENTRY_DESC"
+					label="PLG_JOOMLAAPPS_ENTRY_LABEL"
+					size="50"
+				/>
 			</fieldset>
 		</fields>
 	</config>
