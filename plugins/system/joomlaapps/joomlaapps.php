@@ -77,6 +77,11 @@ class PlgSystemJoomlaapps extends JPlugin
 		$session = JFactory::getSession();
 		$joomlaapps = $this->getJoomlaapps();
 		$field = new SimpleXMLElement('<field></field>');
+
+		/* Add Form Rule URL Class  if not loaded */
+		if(!class_exists('JFormRuleUrl')){
+			require_once JPATH_ROOT . '/libraries/joomla/form/rules/url.php';
+		}
 		$rule = new JFormRuleUrl;
 		return $rule->test($field, $joomlaapps['installat']) &&
 			is_int($joomlaapps['installapp']);
