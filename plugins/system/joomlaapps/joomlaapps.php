@@ -9,6 +9,8 @@
 
 defined('_JEXEC') or die;
 
+JFormHelper::loadRuleClass('url');
+
 /**
  * Support for JoomlaApps download after registration functionality
  *
@@ -73,15 +75,6 @@ class PlgSystemJoomlaapps extends JPlugin
 	
 	private function isDataOK()
 	{
-		$version = new JVersion;
-		if ($version->isCompatible('3.0.0'))
-		{
-			jimport('joomla.form.rule.url');
-		}
-		else
-		{
-			JLoader::register('JFormRuleUrl', JPATH_PLATFORM . '/joomla/form/rules/url.php');
-		}
 		$session = JFactory::getSession();
 		$joomlaapps = $this->getJoomlaapps();
 		$field = new SimpleXMLElement('<field></field>');
