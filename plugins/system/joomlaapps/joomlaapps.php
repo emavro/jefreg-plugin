@@ -73,13 +73,21 @@ class PlgSystemJoomlaapps extends JPlugin
 	
 	private function isDataOK()
 	{
-		jimport('joomla.form.rule.url');
+		$version = new JVersion;
+		if ($version->isCompatible('3.0.0'))
+		{
+			jimport('joomla.form.rule.url');
+		}
+		else
+		{
+			JLoader::register('JFormRuleUrl', JPATH_PLATFORM . '/joomla/form/rules/url.php');
+		}
 		$session = JFactory::getSession();
 		$joomlaapps = $this->getJoomlaapps();
 		$field = new SimpleXMLElement('<field></field>');
 		$rule = new JFormRuleUrl;
 		return $rule->test($field, $joomlaapps['installat']) &&
-			is_int($joomlaapps['installapp']);
+			$this->getInstallFrom($joomlaapps['installapp']);
 	}
 	
 	private function isSessionOK()
@@ -91,45 +99,54 @@ class PlgSystemJoomlaapps extends JPlugin
 			!is_null($joomlaapps['installapp']);
 	}
 	
-	private function getInstallFrom() {
-		$joomlaapps = $this->getSessionValues();
-		$this->setSessionValuesNull();
+	private function getInstallFrom($appid)
+	{
 		$files = $this->params->get('files', null);
 		$files = preg_replace('/\s*=\s*>\s*/', '=>', $files);
 		$files = preg_split('/\s+/', $files);
 		$installfrom = '';
-		foreach ($files as $f) {
-			if (preg_match('/^'.$joomlaapps['installapp'].'=>(.+)/', trim($f), $matches)) {
+		foreach ($files as $f)
+		{
+			if (preg_match('/^'.$appid.'=>(.+)/', trim($f), $matches))
+			{
 				$installfrom = '&installfrom='.base64_encode($matches[1]);
 			}
 		}
-		return array($joomlaapps, $installfrom);
+		return $installfrom;
 	}
 	
 	public function onAfterInitialise()
 	{
+		$app = JFactory::getApplication();
 		if ($this->isDataOK())
 		{
 			$this->setSessionValues();
 			if(JFactory::getUser()->id && $this->isSessionOK())
 			{
-				$array = $this->getInstallFrom();
-				$joomlaapps = $array[0];
-				$installfrom = $array[1];
-				$app = JFactory::getApplication();
+				$joomlaapps = $this->getSessionValues();
+				$this->setSessionValuesNull();
+				$installfrom = $this->getInstallFrom($joomlaapps['installapp']);
 				$app->redirect($joomlaapps['installat'].$installfrom);
 			}
-			$app = JFactory::getApplication();
 			$app->redirect(JRoute::_('index.php?option=com_users&view=login'));
+		}
+		else
+		{
+			$joomlaapps = $this->getJoomlaapps();
+			if ($joomlaapps['installat']) {
+				$installfrom = '&installfrom='.base64_encode('Extension could not be found.');
+				$app->redirect($joomlaapps['installat'].$installfrom);
+			}
 		}
 	}
 	
 	public function onUserLogin()
 	{
-		if ($this->isSessionOK()) {
-			$array = $this->getInstallFrom();
-			$joomlaapps = $array[0];
-			$installfrom = $array[1];
+		if ($this->isSessionOK())
+		{
+			$joomlaapps = $this->getSessionValues();
+			$this->setSessionValuesNull();
+			$installfrom = $this->getInstallFrom($joomlaapps['installapp']);
 			$app = JFactory::getApplication();
 			$app->setUserState('users.login.form.return', $joomlaapps['installat'].$installfrom);
 		}
