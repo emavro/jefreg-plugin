@@ -14,5 +14,6 @@
 	</files>
 	<params>
 		<param name="files" type="textarea" default="" label="Files to download" description="Enter the files to be downloaded. You need to know the extension's JED ID (it is the number at the end of the extension's JED URL) and the URL to the file to be downloaded. Add one file per line using the following format: JEDid=>URL, e.g. 12345=>http://www.mysite.com/file_to_download.zip. You can even use the update file you might be using, e.g. 12345=>http://www.mysite.com/update.xml" rows="20" cols="50" />
+		<param name="entry" type="text" default="" label="Entry URL" description="Enter the URL users should be redirected to upon arrival at your website" />
 	</params>
 </install>
