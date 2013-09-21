@@ -125,7 +125,7 @@ class PlgSystemJoomlaapps extends JPlugin
 			}
 			else
 			{
-				$app->redirect(JRoute::_('index.php?option=com_user&view=login'));
+				$app->redirect(JRoute::_('index.php?option=com_users&view=login'));
 			}
 		}
 		else
