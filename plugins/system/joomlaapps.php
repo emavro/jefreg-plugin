@@ -69,7 +69,6 @@ class plgSystemJoomlaapps extends JPlugin
 	
 	private function isDataOK()
 	{
-		$session = JFactory::getSession();
 		$joomlaapps = $this->getJoomlaapps();
 		
 		//http://daringfireball.net/2010/07/improved_regex_for_matching_urls
