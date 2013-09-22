@@ -72,7 +72,6 @@ class PlgSystemJoomlaapps extends JPlugin
 	
 	private function isDataOK()
 	{
-		$session = JFactory::getSession();
 		$joomlaapps = $this->getJoomlaapps();
 		$field = new SimpleXMLElement('<field></field>');
 		$rule = new JFormRuleUrl;
