@@ -84,8 +84,8 @@ class plgSystemJoomlaapps extends JPlugin
 		$joomlaapps = $this->getSessionValues();
 		return $joomlaapps['timestamp'] &&
 			time() < $joomlaapps['timestamp'] + 18 * 60 * 60 &&
-			!is_null($joomlaapps['installat']) &&
-			!is_null($joomlaapps['installapp']);
+			$joomlaapps['installat'] &&
+			$joomlaapps['installapp'];
 	}
 	
 	private function getInstallFrom($appid)
