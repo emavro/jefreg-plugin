@@ -26,7 +26,7 @@
 					label="PLG_JOOMLAAPPS_FILES_LABEL"
 					rows="15"
 				/>
-				<field name="entry" type="text"
+				<field name="entry" type="url"
 					description="PLG_JOOMLAAPPS_ENTRY_DESC"
 					label="PLG_JOOMLAAPPS_ENTRY_LABEL"
 					size="60"
