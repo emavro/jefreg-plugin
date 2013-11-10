@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="system" method="upgrade">
+	<name>plg_system_jefreg</name>
+	<author>Efthimios Mavrogeorgiadis</author>
+	<creationDate>10 November 2013</creationDate>
+	<copyright>Copyright (C) 2013 Efthimios Mavrogeorgiadis. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>admin@iota.gr</authorEmail>
+	<authorUrl>www.iota.gr</authorUrl>
+	<version>1.1.0</version>
+	<description>PLG_SYSTEM_JEFREG_XML_DESCRIPTION</description>
+	<files>
+		<filename plugin="jefreg">jefreg.php</filename>
+		<filename>index.html</filename>
+	</files>
+	<languages>
+		<language tag="en-GB">en-GB.plg_system_jefreg.ini</language>
+		<language tag="en-GB">en-GB.plg_system_jefreg.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="files" type="textarea"
+					cols="100"
+					description="PLG_JEFREG_FILES_DESC"
+					label="PLG_JEFREG_FILES_LABEL"
+					rows="15"
+				/>
+				<field name="entry" type="url"
+					description="PLG_JEFREG_ENTRY_DESC"
+					label="PLG_JEFREG_ENTRY_LABEL"
+					size="60"
+				/>
+			</fieldset>
+		</fields>
+	</config>
+	<updateservers>
+		<server type="extension" priority="1" name="JoomlaApps Update Site">http://www.iota.gr/data/joomla/jefreg/jefreg.xml</server>
+	</updateservers>
+</extension>
