@@ -10,7 +10,7 @@
 defined('_JEXEC') or die;
 
 /**
- * JEF integration to allow automatic installation of extensions upon payment of a plan
+ * JEF integration to allow automatic installation of extensions upon payment of a plan with CBSubs
  *
  * @package     Joomla.Plugin
  * @subpackage  System.jefcbsubs
