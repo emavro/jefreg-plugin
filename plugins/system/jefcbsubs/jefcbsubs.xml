@@ -8,7 +8,7 @@
 	<authorEmail>admin@iota.gr</authorEmail>
 	<authorUrl>www.iota.gr</authorUrl>
 	<version>1.0.0</version>
-	<description>JEF integration to allow automatic installation of extensions upon payment of a plan.</description>
+	<description>JEF integration to allow automatic installation of extensions upon payment of a plan with CBSubs.</description>
 	<files>
 		<filename plugin="jefcbsubs">jefcbsubs.php</filename>
 		<filename>index.html</filename>
