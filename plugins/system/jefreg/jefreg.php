@@ -13,7 +13,7 @@ jimport( 'joomla.session.storage' );
 JFormHelper::loadRuleClass('url');
 
 /**
- * Support for JoomlaApps download after registration functionality
+ * Support for JEF (Install from Web) download after registration/purchase functionality
  *
  * @package     Joomla.Plugin
  * @subpackage  System.jefreg
@@ -24,6 +24,12 @@ class PlgSystemJefreg extends JPlugin
 	var $_jefreg = array();
 	var $_sessionvals = array();
 	
+	/**
+	 * Populate $_jefreg with POST data
+	 *
+	 * @return  array  POST data
+	 *
+	 */
 	private function getJEFReg()
 	{
 		if (!count($this->_jefreg))
@@ -39,6 +45,12 @@ class PlgSystemJefreg extends JPlugin
 		return $this->_jefreg;
 	}
 	
+	/**
+	 * Set the commercial flag ON
+	 *
+	 * @return  void
+	 *
+	 */
 	private function setCommercialOn()
 	{
 		$session = JFactory::getSession();
@@ -46,10 +58,17 @@ class PlgSystemJefreg extends JPlugin
 		$this->_jefreg['commercial'] = 1;
 	}
 	
+	/**
+	 * Check the commercial flag
+	 *
+	 * @return  boolean
+	 *
+	 * @since   3.1
+	 */
 	private function isCommercial()
 	{
 		$session = JFactory::getSession();
-		return $session->set('jefreg.commercial');
+		return $session->get('jefreg.commercial');
 	}
 	
 	private function getSessionValues()
