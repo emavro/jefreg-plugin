@@ -82,6 +82,7 @@ class PlgSystemJefcbsubs extends JPlugin
 		$installfrom = '';
 		foreach ( $files as $f )
 		{
+			// Check only lines that start with *cbsubs: in the 'files' parameter of the JEFReg plugin
 			preg_match( '/^\*cbsubs:'.$sessionvals['installapp'].'=>(.+?)&cbsubsplan=(\d+).*?$/', trim( $f ), $matches );
 
 			// Make sure the user has access to the requested product
