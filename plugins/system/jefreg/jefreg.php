@@ -21,11 +21,11 @@ JFormHelper::loadRuleClass('url');
  */
 class PlgSystemJefreg extends JPlugin
 {
-	var $_jefreg = array();
-	var $_sessionvals = array();
+	var $_jefreg = array();		// $_POST data
+	var $_sessionvals = array();	// $_SESSION data
 	
 	/**
-	 * Populate $_jefreg with POST data
+	 * Populate $_jefreg with $_POST data
 	 *
 	 * @return  array  POST data
 	 *
@@ -63,7 +63,6 @@ class PlgSystemJefreg extends JPlugin
 	 *
 	 * @return  boolean
 	 *
-	 * @since   3.1
 	 */
 	private function isCommercial()
 	{
@@ -71,6 +70,12 @@ class PlgSystemJefreg extends JPlugin
 		return $session->get('jefreg.commercial');
 	}
 	
+	/**
+	 * Get the $_POST data as stored in $_SESSION
+	 *
+	 * @return  array  $_POST data as stored in $_SESSION
+	 *
+	 */
 	private function getSessionValues()
 	{
 		if (!$this->_sessionvals)
@@ -85,6 +90,12 @@ class PlgSystemJefreg extends JPlugin
 		return $this->_sessionvals;
 	}
 	
+	/**
+	 * Copy $_POST data to $_SESSION
+	 *
+	 * @return  void
+	 *
+	 */
 	private function setSessionValues($null = false)
 	{
 		$session = JFactory::getSession();
@@ -99,11 +110,23 @@ class PlgSystemJefreg extends JPlugin
 		}
 	}
 	
+	/**
+	 * Set $_SESSION values to NULL once user has registered
+	 *
+	 * @return  void
+	 *
+	 */
 	private function setSessionValuesNull()
 	{
 		$this->setSessionValues(true);
 	}
 	
+	/**
+	 * Check if $_POST data is what we expect it to be
+	 *
+	 * @return  boolean  true = OK, false = NOT OK
+	 *
+	 */
 	private function isDataOK()
 	{
 		$jefreg = $this->getJEFReg();
@@ -113,6 +136,12 @@ class PlgSystemJefreg extends JPlugin
 			$this->getInstallFrom($jefreg['installapp']);
 	}
 	
+	/**
+	 * Check if $_SESSION contains the data we need
+	 *
+	 * @return  boolean  true = OK, false = NOT OK
+	 *
+	 */
 	private function isSessionOK()
 	{
 		$jefreg = $this->getSessionValues();
@@ -123,6 +152,14 @@ class PlgSystemJefreg extends JPlugin
 			!$jefreg['commercial'];
 	}
 	
+	/**
+	 * Get the URL the user's backend should access to directly retrieve the installation/update file
+	 *
+	 * @param   integer	$appid	Extension JED ID
+	 *
+	 * @return  string	URL pointing to package, XML file, or direct download script
+	 *
+	 */
 	private function getInstallFrom($appid)
 	{
 		$files = $this->params->get('files', null);
@@ -145,6 +182,12 @@ class PlgSystemJefreg extends JPlugin
 		return $installfrom;
 	}
 	
+	/**
+	 * Remove $_SESSION data from the database
+	 *
+	 * @return  void
+	 *
+	 */
 	public function onAfterRoute()
 	{
 		$app = JFactory::getApplication();
@@ -161,6 +204,12 @@ class PlgSystemJefreg extends JPlugin
 		}
 	}
 	
+	/**
+	 * Entry point to handle original $_POST data
+	 *
+	 * @return  void
+	 *
+	 */
 	public function onAfterInitialise()
 	{
 		$app = JFactory::getApplication();
@@ -214,6 +263,12 @@ class PlgSystemJefreg extends JPlugin
 		}
 	}
 	
+	/**
+	 * Redirect user after login
+	 *
+	 * @return  void
+	 *
+	 */
 	public function onUserAfterLogin()
 	{
 		$app = JFactory::getApplication();
