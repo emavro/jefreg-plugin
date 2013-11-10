@@ -25,9 +25,9 @@ class PlgSystemJefreg extends JPlugin
 	var $_sessionvals = array();	// $_SESSION data
 	
 	/**
-	 * Populate $_jefreg with $_POST data
+	 * Populate/Return $_jefreg with $_POST data
 	 *
-	 * @return  array  POST data
+	 * @return  array  $_POST data
 	 *
 	 */
 	private function getJEFReg()
@@ -71,7 +71,7 @@ class PlgSystemJefreg extends JPlugin
 	}
 	
 	/**
-	 * Get the $_POST data as stored in $_SESSION
+	 * Populate/Return $_sessionvals with $_POST data as stored in $_SESSION
 	 *
 	 * @return  array  $_POST data as stored in $_SESSION
 	 *
@@ -93,6 +93,8 @@ class PlgSystemJefreg extends JPlugin
 	/**
 	 * Copy $_POST data to $_SESSION
 	 *
+	 * @param   boolean	$null	If set to TRUE, all jefreg $_SESSION values are set to NULL
+	 *
 	 * @return  void
 	 *
 	 */
@@ -111,7 +113,7 @@ class PlgSystemJefreg extends JPlugin
 	}
 	
 	/**
-	 * Set $_SESSION values to NULL once user has registered
+	 * Set $_SESSION values to NULL once we are ready to redirect to user backend
 	 *
 	 * @return  void
 	 *
@@ -130,6 +132,8 @@ class PlgSystemJefreg extends JPlugin
 	private function isDataOK()
 	{
 		$jefreg = $this->getJEFReg();
+		
+		// Use JFormRuleUrl to check if $_POST['installat'] is valid URL
 		$field = new SimpleXMLElement('<field></field>');
 		$rule = new JFormRuleUrl;
 		return $rule->test($field, $jefreg['installat']) &&
@@ -153,7 +157,7 @@ class PlgSystemJefreg extends JPlugin
 	}
 	
 	/**
-	 * Get the URL the user's backend should access to directly retrieve the installation/update file
+	 * Get the URL the user backend should access to directly retrieve the installation/update file
 	 *
 	 * @param   integer	$appid	Extension JED ID
 	 *
@@ -162,19 +166,26 @@ class PlgSystemJefreg extends JPlugin
 	 */
 	private function getInstallFrom($appid)
 	{
+		// Basic clean up of 'files' parameter as set in plugin options
 		$files = $this->params->get('files', null);
 		$files = preg_replace('/\s*=\s*>\s*/', '=>', $files);
 		$files = preg_replace('/^\s*\**\s*/', '*', $files);
 		$files = preg_split('/\s+/', $files);
+
+		// Match the $_POST value of the JED ID [$appid] with the extensions available on the server
+		// as listed in the 'files' parameter of the plugin
 		$installfrom = '';
 		foreach ($files as $f)
 		{
+			// Check for file that is available after registration
 			if (preg_match('/^'.$appid.'=>(.+)/', trim($f), $matches))
 			{
 				$installfrom = '&installfrom='.base64_encode($matches[1].'&sessid='.session_id());
 			}
+			// Check for file that is available after purchase
 			elseif (preg_match('/^\*.*:'.$appid.'=>(.+)/', trim($f), $matches))
 			{
+				// If found, set commercial flag ON
 				$this->setCommercialOn();
 				$installfrom = $matches[1];
 			}
@@ -196,6 +207,7 @@ class PlgSystemJefreg extends JPlugin
 			return;
 		}
 		
+		// Remove $_SESSION data from the database only if $_GET['sessid'] has a value
 		$sessid = $app->input->get('sessid', null);
 		if (!is_null($sessid))
 		{
@@ -212,12 +224,14 @@ class PlgSystemJefreg extends JPlugin
 	 */
 	public function onAfterInitialise()
 	{
+		// Make sure we're no in the backend
 		$app = JFactory::getApplication();
 		if (!$app->isSite())
 		{
 			return;
 		}
-		
+
+		// Retrieve $_SESSION data from the database if $_GET['sessid'] has a value		
 		$sessid = $app->input->get('sessid', null);
 		if (!is_null($sessid))
 		{
@@ -227,9 +241,14 @@ class PlgSystemJefreg extends JPlugin
 			return;
 		}
 		
+		// Check if $_POST data is what we expect it to be
 		if ($this->isDataOK())
 		{
+			// Copy $_POST data to $_SESSION
 			$this->setSessionValues();
+
+			// If user is already logged in and our $_SESSION values are OK,
+			// redirect back to user backend
 			if(JFactory::getUser()->id && $this->isSessionOK())
 			{
 				$jefreg = $this->getSessionValues();
