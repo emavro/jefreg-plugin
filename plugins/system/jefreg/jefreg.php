@@ -224,7 +224,7 @@ class PlgSystemJefreg extends JPlugin
 	 */
 	public function onAfterInitialise()
 	{
-		// Make sure we're no in the backend
+		// Make sure we're not in the backend
 		$app = JFactory::getApplication();
 		if (!$app->isSite())
 		{
@@ -232,6 +232,7 @@ class PlgSystemJefreg extends JPlugin
 		}
 
 		// Retrieve $_SESSION data from the database if $_GET['sessid'] has a value		
+		// Note: $_GET['sessid'] is set when the user backend requests file to install
 		$sessid = $app->input->get('sessid', null);
 		if (!is_null($sessid))
 		{
@@ -248,7 +249,7 @@ class PlgSystemJefreg extends JPlugin
 			$this->setSessionValues();
 
 			// If user is already logged in and our $_SESSION values are OK,
-			// redirect back to user backend
+			// redirect back to user backend with installation information
 			if(JFactory::getUser()->id && $this->isSessionOK())
 			{
 				$jefreg = $this->getSessionValues();
@@ -256,17 +257,23 @@ class PlgSystemJefreg extends JPlugin
 				$installfrom = $this->getInstallFrom($jefreg['installapp']);
 				$app->redirect($jefreg['installat'].$installfrom);
 			}
+
+			// Get the optional 'entry' parameter from the plugin options
 			$entry = $this->params->get('entry', null);
+
+			// If the extension is commercial, redirect to the URL submitted by the developer on JED/JEF
 			if ($this->isCommercial())
 			{
 				$jefreg = $this->getSessionValues();
 				$installfrom = $this->getInstallFrom($jefreg['installapp']);
 				$app->redirect(JRoute::_($installfrom));
 			}
+			// If the 'entry' parameter has been set, redirect there
 			elseif ($entry)
 			{
 				$app->redirect(JRoute::_($entry));
 			}
+			// If the 'entry' parameter has not been set, redirect to default login page
 			else
 			{
 				$app->redirect(JRoute::_('index.php?option=com_users&view=login'));
@@ -274,6 +281,7 @@ class PlgSystemJefreg extends JPlugin
 		}
 		else
 		{
+			// If $_POST data fails validation testing, redirect to user backend with error message
 			$jefreg = $this->getJEFReg();
 			if ($jefreg['installat']) {
 				$installfrom = '&installfrom='.base64_encode('Extension could not be found.');
@@ -290,6 +298,9 @@ class PlgSystemJefreg extends JPlugin
 	 */
 	public function onUserAfterLogin()
 	{
+		// Make sure we're not in the backend, the requested extension is not commercial,
+		// and $_GET['sessid'] has no value
+		// Note: $_GET['sessid'] is set when the user backend requests file to install
 		$app = JFactory::getApplication();
 		$sessid = $app->input->get('sessid', null);
 		if (!$app->isSite() || $this->isCommercial() || !is_null($sessid))
@@ -297,11 +308,13 @@ class PlgSystemJefreg extends JPlugin
 			return;
 		}
 
+		// Make sure user login data is stored in $_SESSION and database
 		$session = JFactory::getSession();
 		$session->set('user', JFactory::getUser());
 		$sesstore = JSessionStorage::getInstance('database');
 		$sesstore->write(session_id(), session_encode());
 
+		// If $_SESSION values are OK, redirect back to user backend with installation information
 		if ($this->isSessionOK())
 		{
 			$jefreg = $this->getSessionValues();
