@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="2.5" type="plugin" group="system" method="upgrade">
-	<name>JEF-CBSubs Integration</name>
+	<name>JEF-HikaShop Integration</name>
 	<author>Efthimios Mavrogeorgiadis</author>
-	<creationDate>9 November 2013</creationDate>
+	<creationDate>14 November 2013</creationDate>
 	<copyright>Copyright (C) 2013 Efthimios Mavrogeorgiadis. All rights reserved.</copyright>
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<authorEmail>admin@iota.gr</authorEmail>
 	<authorUrl>www.iota.gr</authorUrl>
 	<version>1.0.0</version>
-	<description>JEF integration to allow automatic installation of extensions upon payment of a plan with CBSubs.</description>
+	<description>JEF integration to allow automatic installation of extensions upon payment of a plan with HikaShop.</description>
 	<files>
-		<filename plugin="jefcbsubs">jefcbsubs.php</filename>
+		<filename plugin="jefhikashop">jefhikashop.php</filename>
 		<filename>index.html</filename>
 	</files>
 	<updateservers>
-		<server type="extension" priority="1" name="JoomlaApps Update Site">http://www.iota.gr/data/joomla/jefcbsubs/jefcbsubs.xml</server>
+		<server type="extension" priority="1" name="JEF-HikaShop Update Site">http://www.iota.gr/data/joomla/jefhikashop/jefhikashop.xml</server>
 	</updateservers>
 </extension>
