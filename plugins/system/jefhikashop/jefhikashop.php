@@ -63,8 +63,7 @@ class PlgSystemJefhikashop extends JPlugin
 			return;
 		}
 
-		define(DS, DIRECTORY_SEPARATOR);
-		include_once(rtrim(JPATH_ADMINISTRATOR,DS).DS.'components'.DS.'com_hikashop'.DS.'helpers'.DS.'helper.php');
+		include_once(rtrim(JPATH_ADMINISTRATOR) . '/components/com_hikashop/helpers/helper.php');
 
 		$prodClass = hikashop_get('class.product');
 		$product = $prodClass->get($productid);
